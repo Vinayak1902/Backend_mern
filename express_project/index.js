@@ -2,7 +2,48 @@ let express = require('express')
 
 let app = express()
 app.use(express.json())
+let myToken = "12345"
+let myPass = "54321"
 
+let checkToken=(req,res,next)=>{
+    if(req.query.token=="" || req.query.token==undefined){
+        return res.send(
+            {
+                status:0,
+                msg:"Please Fill the Token"
+            }
+        )
+    }
+    if(req.query.token!=myToken){
+        return res.send(
+            {
+                status:0,
+                msg:"Please fill the correct token"
+            }
+        )
+    }
+    next();
+}
+app.use(checkToken)  // middleware
+app.use((req,res,next)=>{
+    if(req.query.pass=="" || req.query.pass==undefined){
+        return res.send(
+            {
+                status:0,
+                msg:"Please Fill the password"
+            }
+        )
+    }
+    if(req.query.pass!=myPass){
+        return res.send(
+            {
+                status:0,
+                msg:"Please fill the correct password"
+            }
+        )
+    }
+    next();
+})
 app.get('/', (req,res)=>{
     res.send({status:1,msg:'Home Page API'})
 })
