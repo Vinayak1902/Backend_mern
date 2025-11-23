@@ -24,6 +24,14 @@ app.post("/student-insert",async (req,res)=>{
     //     sEmail:req.body.sEmail,
     // }
     let {sName,sEmail}=req.body;
+    let existingStudent = await studentCollection.findOne({ sEmail });
+
+    if (existingStudent) {
+        return res.send({
+            status: 0,
+            msg: "Email already exists. Please use a different email."
+        });
+    }
     let obj={sName,sEmail};
 
     let insertRes = await studentCollection.insertOne(obj)
